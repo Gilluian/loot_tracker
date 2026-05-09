@@ -1,28 +1,27 @@
 import os
 from dotenv import load_dotenv
-from db_funcs import LootTracker as lt
+from db_funcs import LootTracker
 
 load_dotenv()
 
 def main():
+    # Collects the database config values from the env file.
     db_config = {
         'dbname': os.getenv('DB_NAME'),
         'user': os.getenv('DB_USER'),
         'password': os.getenv('DB_PASSWORD'),
         'host': os.getenv('DB_HOST'),
-        'port': os.getenv('DB_PORT')
+        'port': os.getenv('DB_PORT'),
     }
-    db = lt(db_config)
-
-
-
-    startup()
+    schema_path = os.getenv('SCHEMA_PATH')
+   
+    db = startup(db_config, schema_path)
     run_program()
     cleanup(db)
 
-def startup():
-
-    print("Starting the program...")
+def startup(cfg, schema_path):
+    # initial checks. creates the database tables, creates initial users. 
+    return LootTracker(cfg, schema_path)
 
 
 def run_program():
