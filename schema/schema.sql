@@ -26,7 +26,8 @@ CREATE TABLE IF NOT EXISTS characters (
 );
 
 CREATE TABLE IF NOT EXISTS  items (
-    item_id        INTEGER PRIMARY KEY,
+    sql_item_id    SERIAL PRIMARY KEY,
+    item_id        INTEGER UNIQUE NOT NULL,
     item_name      TEXT,
     item_class     TEXT,
     item_sub_class TEXT,
