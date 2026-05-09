@@ -11,7 +11,7 @@ def main():
         'user': os.getenv('DB_USER'),
         'password': os.getenv('DB_PASSWORD'),
         'host': os.getenv('DB_HOST'),
-        'port': os.getenv('DB_PORT'),
+        'port': int(os.getenv('DB_PORT'))
     }
     schema_path = os.getenv('SCHEMA_PATH')
    

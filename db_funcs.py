@@ -13,9 +13,11 @@ class LootTracker:
         except psycopg2.OperationalError as e:
             error = str(e)
             if 'does not exist' in error and self.db_config['dbname'] in error:
-                self.create_initial_database()
+                print('Database does not exist. Attempting to create it...')
+                self.create_initial_database() #creates its own connection so the db can be created
                 self.conn = psycopg2.connect(**self.db_config)
                 self.create_initial_tables(self.conn, self.schema_path)
+                self.seed_initial_characters(self.conn)
             else:
                 print(f"Operational error connecting to database: {e}")
             
@@ -50,3 +52,13 @@ class LootTracker:
             cur.execute(sql)
             conn.commit()
         print("Initial tables created successfully.")
+    
+    def seed_initial_characters(self, conn):
+        self.conn.cursor().execute("INSERT INTO players (player_name) VALUES ('_system');")
+        initial_characters = ['_disenchanted','_system']
+        # Seed the initial characters
+        for i in initial_characters:
+            self.conn.cursor().execute(f"INSERT INTO characters (player_id, character_name) VALUES (1,'{i}');")
+        self.conn.commit()
+        print("Initial characters seeded successfully.")
+
